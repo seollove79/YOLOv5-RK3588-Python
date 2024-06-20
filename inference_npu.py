@@ -47,7 +47,6 @@ def get_host():
         host = os_machine
     return host
 
-#def draw(image, boxes, scores, classes):
 def draw(image, boxes, scores, classes, dw, dh):
     """Draw the boxes on the image.
 
@@ -60,8 +59,6 @@ def draw(image, boxes, scores, classes, dw, dh):
     """
     for box, score, cl in zip(boxes, scores, classes):
         top, left, right, bottom = box
-#        print('class: {}, score: {}'.format(CLASSES[cl], score))
-#        print('box coordinate left,top,right,down: [{}, {}, {}, {}]'.format(top, left, right, bottom))
 
         ##Transform Box to original image
         top, left, right, bottom = letterbox_reverse_box(top, left, right, bottom, config.CAM_WIDTH, config.CAM_HEIGHT, config.IMG_SIZE, config.IMG_SIZE, dw, dh)
@@ -190,9 +187,7 @@ if __name__ == '__main__':
         
         if not ret:
             break
-#Debug Webcam Input
-#        cv2.imshow("Original", frame)
-#Show FPS in Pic
+
         new_frame_time = time.time()
         show_fps = 1/(new_frame_time-prev_frame_time)
         prev_frame_time = new_frame_time
@@ -203,10 +198,10 @@ if __name__ == '__main__':
 
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
-#        frame = cv2.resize(frame, (IMG_SIZE, IMG_SIZE))
 
         # Inference
         outputs = rknn_lite.inference(inputs=[frame])
+        
 
         # post process
         input0_data = outputs[0]
@@ -224,29 +219,17 @@ if __name__ == '__main__':
 
 #Disable Enable YOLO Post process
         boxes, classes, scores = yolov5_post_process(input_data)
-
-#        boxes = None
-
-#        img_1 = frame
         img_1 = ori_frame
         if boxes is not None:
+            print("인식됨")
 
-#            img_1 = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-#            draw(img_1, boxes, scores, classes)
-            draw(img_1, boxes, scores, classes, dw, dh)
-            
+            #draw(img_1, boxes, scores, classes, dw, dh)
+           
             # show FPS in Frame
-            cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
-            
-            #rescale to equal original
-#            old_h, old_w = img_1.shape[:2]
-#            ratio_h, ratio_w = ratio
-#            print(old_h/ratio_h, old_w/ratio_w)
-#            img_1 = cv2.resize(img_1, (int(old_h/ratio_h), int(old_w/ratio_w)), interpolation=cv2.INTER_LINEAR)
-#            img_1 = cv2.resize(img_1, (800, 800), interpolation=cv2.INTER_LINEAR)
+            #cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
             
             # show output
-            cv2.imshow("yolov5 post process result", img_1)
+            #cv2.imshow("yolov5 post process result", img_1)
             
         key = cv2.waitKey(1) & 0xFF
         
