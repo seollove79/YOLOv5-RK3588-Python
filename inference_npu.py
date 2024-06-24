@@ -204,6 +204,8 @@ if __name__ == '__main__':
 
         # Inference
         outputs = rknn_lite.inference(inputs=[frame])
+
+        import pdb; pdb.set_trace()
         
 
         # post process
