@@ -75,6 +75,9 @@ def draw(image, boxes, scores, classes, dw, dh):
                     0.6, (0, 0, 255), 2)
 
 def letterbox(im, new_shape=(640, 640), color=(0, 0, 0)):
+
+    import pdb; pdb.set_trace()
+
     # Resize and pad image while meeting stride-multiple constraints
     shape = im.shape[:2]  # current shape [height, width]
     if isinstance(new_shape, int):
@@ -197,8 +200,6 @@ if __name__ == '__main__':
         ori_frame = frame
 
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-        import pdb; pdb.set_trace()
 
         frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
 
