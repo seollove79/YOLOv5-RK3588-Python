@@ -22,3 +22,7 @@ python inference_npu.py
 
 # Example on Youtube
 https://www.youtube.com/watch?v=eD6L55MkDoo
+
+# rknn-tookit-lite2 v2.0.0 까지 테스트 완료
+1. 1.4.0은 python 3.9 환경에서 inference_npu.py 실행
+2. 2.0.0은 python 3.11 환경에서 inference_npu2.py 실행
