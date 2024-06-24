@@ -197,6 +197,9 @@ if __name__ == '__main__':
         ori_frame = frame
 
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        import pdb; pdb.set_trace()
+
         frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
 
         # Inference
