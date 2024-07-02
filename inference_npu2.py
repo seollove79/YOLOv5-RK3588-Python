@@ -152,7 +152,7 @@ if __name__ == '__main__':
     print('--> Init runtime environment')
     # run on RK356x/RK3588 with Debian OS, do not need specify target.
     if host_name == 'RK3588':
-        ret = rknn_lite.init_runtime(core_mask=RKNNLite.NPU_CORE_0)
+        ret = rknn_lite.init_runtime(core_mask=RKNNLite.NPU_CORE_0_1_2)
     else:
         ret = rknn_lite.init_runtime()
     if ret != 0:
