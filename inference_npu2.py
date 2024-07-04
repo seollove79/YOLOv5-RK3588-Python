@@ -191,38 +191,40 @@ if __name__ == '__main__':
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
 
-        # Convert to 4D array (N, C, H, W)
-        frame = np.expand_dims(frame, axis=0)
+        cv2.imshow("yolov5 post process result", img_1)
 
-        # Inference
-        outputs = rknn_lite.inference(inputs=[frame])
+        # # Convert to 4D array (N, C, H, W)
+        # frame = np.expand_dims(frame, axis=0)
 
-        # post process
-        input0_data = outputs[0]
-        input1_data = outputs[1]
-        input2_data = outputs[2]
+        # # Inference
+        # outputs = rknn_lite.inference(inputs=[frame])
 
-        input0_data = input0_data.reshape([3, -1]+list(input0_data.shape[-2:]))
-        input1_data = input1_data.reshape([3, -1]+list(input1_data.shape[-2:]))
-        input2_data = input2_data.reshape([3, -1]+list(input2_data.shape[-2:]))
+        # # post process
+        # input0_data = outputs[0]
+        # input1_data = outputs[1]
+        # input2_data = outputs[2]
 
-        input_data = list()
-        input_data.append(np.transpose(input0_data, (2, 3, 0, 1)))
-        input_data.append(np.transpose(input1_data, (2, 3, 0, 1)))
-        input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
+        # input0_data = input0_data.reshape([3, -1]+list(input0_data.shape[-2:]))
+        # input1_data = input1_data.reshape([3, -1]+list(input1_data.shape[-2:]))
+        # input2_data = input2_data.reshape([3, -1]+list(input2_data.shape[-2:]))
 
-        # Disable Enable YOLO Post process
-        boxes, classes, scores = yolov5_post_process(input_data)
-        img_1 = ori_frame
+        # input_data = list()
+        # input_data.append(np.transpose(input0_data, (2, 3, 0, 1)))
+        # input_data.append(np.transpose(input1_data, (2, 3, 0, 1)))
+        # input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
 
-        if boxes is not None:
-            draw(img_1, boxes, scores, classes, dw, dh)
+        # # Disable Enable YOLO Post process
+        # boxes, classes, scores = yolov5_post_process(input_data)
+        # img_1 = ori_frame
+
+        # if boxes is not None:
+        #     draw(img_1, boxes, scores, classes, dw, dh)
            
-            # show FPS in Frame
-            cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
+        #     # show FPS in Frame
+        #     cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
             
-            # show output
-            cv2.imshow("yolov5 post process result", img_1)
+        #     # show output
+        #     cv2.imshow("yolov5 post process result", img_1)
 
             
         key = cv2.waitKey(1) & 0xFF
