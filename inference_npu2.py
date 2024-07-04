@@ -4,7 +4,7 @@ import platform
 from rknnlite.api import RKNNLite
 from imutils.video import FPS
 import time
-from lib.postprocess1 import yolov5_post_process, letterbox_reverse_box
+from lib.postprocess import yolov5_post_process, letterbox_reverse_box
 import lib.config as config
 import argparse
 
