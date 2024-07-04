@@ -180,48 +180,52 @@ if __name__ == '__main__':
         if not ret:
             break
 
-        new_frame_time = time.time()
-        show_fps = 1/(new_frame_time - prev_frame_time)
-        prev_frame_time = new_frame_time
-        show_fps = int(show_fps)
-        show_fps = str("{} FPS".format(show_fps))
+        # new_frame_time = time.time()
+        # show_fps = 1/(new_frame_time - prev_frame_time)
+        # prev_frame_time = new_frame_time
+        # show_fps = int(show_fps)
+        # show_fps = str("{} FPS".format(show_fps))
 
-        ori_frame = frame
+        # ori_frame = frame
 
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
+        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
 
-        # Convert to 4D array (N, C, H, W)
-        frame = np.expand_dims(frame, axis=0)
+        # # Convert to 4D array (N, C, H, W)
+        # frame = np.expand_dims(frame, axis=0)
 
-        # Inference
-        outputs = rknn_lite.inference(inputs=[frame])
+        # # Inference
+        # outputs = rknn_lite.inference(inputs=[frame])
 
-        # post process
-        input0_data = outputs[0]
-        input1_data = outputs[1]
-        input2_data = outputs[2]
+        # # post process
+        # input0_data = outputs[0]
+        # input1_data = outputs[1]
+        # input2_data = outputs[2]
 
-        input0_data = input0_data.reshape([3, -1]+list(input0_data.shape[-2:]))
-        input1_data = input1_data.reshape([3, -1]+list(input1_data.shape[-2:]))
-        input2_data = input2_data.reshape([3, -1]+list(input2_data.shape[-2:]))
+        # input0_data = input0_data.reshape([3, -1]+list(input0_data.shape[-2:]))
+        # input1_data = input1_data.reshape([3, -1]+list(input1_data.shape[-2:]))
+        # input2_data = input2_data.reshape([3, -1]+list(input2_data.shape[-2:]))
 
-        input_data = list()
-        input_data.append(np.transpose(input0_data, (2, 3, 0, 1)))
-        input_data.append(np.transpose(input1_data, (2, 3, 0, 1)))
-        input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
+        # input_data = list()
+        # input_data.append(np.transpose(input0_data, (2, 3, 0, 1)))
+        # input_data.append(np.transpose(input1_data, (2, 3, 0, 1)))
+        # input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
 
-        # Disable Enable YOLO Post process
-        boxes, classes, scores = yolov5_post_process(input_data)
-        img_1 = ori_frame
-        if boxes is not None:
-            draw(img_1, boxes, scores, classes, dw, dh)
+        # # Disable Enable YOLO Post process
+        # boxes, classes, scores = yolov5_post_process(input_data)
+        # img_1 = ori_frame
+
+        # if boxes is not None:
+        #     draw(img_1, boxes, scores, classes, dw, dh)
            
-            # show FPS in Frame
-            cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
+        #     # show FPS in Frame
+        #     cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
             
-            # show output
-            cv2.imshow("yolov5 post process result", img_1)
+        #     # show output
+        #     cv2.imshow("yolov5 post process result", img_1)
+
+
+        cv2.imshow("yolov5 post process result", frame)
             
         key = cv2.waitKey(1) & 0xFF
         
