@@ -216,10 +216,10 @@ if __name__ == '__main__':
         img_1 = ori_frame
 
         if boxes is not None:
-            # draw(img_1, boxes, scores, classes, dw, dh)
+            draw(img_1, boxes, scores, classes, dw, dh)
            
-            # # show FPS in Frame
-            # cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
+            # show FPS in Frame
+            cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
             
             # show output
             cv2.imshow("yolov5 post process result", img_1)
