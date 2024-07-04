@@ -197,21 +197,22 @@ if __name__ == '__main__':
         # Inference
         outputs = rknn_lite.inference(inputs=[frame])
 
+
+        # post process
+        input0_data = outputs[0]
+        input1_data = outputs[1]
+        input2_data = outputs[2]
+
+        input0_data = input0_data.reshape([3, -1]+list(input0_data.shape[-2:]))
+        input1_data = input1_data.reshape([3, -1]+list(input1_data.shape[-2:]))
+        input2_data = input2_data.reshape([3, -1]+list(input2_data.shape[-2:]))
+
+        input_data = list()
+        input_data.append(np.transpose(input0_data, (2, 3, 0, 1)))
+        input_data.append(np.transpose(input1_data, (2, 3, 0, 1)))
+        input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
+
         cv2.imshow("yolov5 post process result", ori_frame)
-
-        # # post process
-        # input0_data = outputs[0]
-        # input1_data = outputs[1]
-        # input2_data = outputs[2]
-
-        # input0_data = input0_data.reshape([3, -1]+list(input0_data.shape[-2:]))
-        # input1_data = input1_data.reshape([3, -1]+list(input1_data.shape[-2:]))
-        # input2_data = input2_data.reshape([3, -1]+list(input2_data.shape[-2:]))
-
-        # input_data = list()
-        # input_data.append(np.transpose(input0_data, (2, 3, 0, 1)))
-        # input_data.append(np.transpose(input1_data, (2, 3, 0, 1)))
-        # input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
 
         # # Disable Enable YOLO Post process
         # boxes, classes, scores = yolov5_post_process(input_data)
