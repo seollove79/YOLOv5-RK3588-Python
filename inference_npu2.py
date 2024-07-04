@@ -74,7 +74,7 @@ def draw(image, boxes, scores, classes, dw, dh):
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.6, (0, 0, 255), 2)
 
-def letterbox(im, new_shape=(640, 640), color=(0, 0, 0)):
+def letterbox(im, new_shape=(640, 480), color=(0, 0, 0)):
 
 
     # Resize and pad image while meeting stride-multiple constraints
