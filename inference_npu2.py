@@ -61,8 +61,7 @@ def draw(image, boxes, scores, classes, dw, dh):
         top, left, right, bottom = box
 
         ##Transform Box to original image
-        #top, left, right, bottom = letterbox_reverse_box(top, left, right, bottom, config.CAM_WIDTH, config.CAM_HEIGHT, config.IMG_SIZE, config.IMG_SIZE, dw, dh)
-        top, left, right, bottom = letterbox_reverse_box(top, left, right, bottom, config.CAM_WIDTH, config.CAM_HEIGHT, config.IMG_SIZE, 480, dw, dh)
+        top, left, right, bottom = letterbox_reverse_box(top, left, right, bottom, config.CAM_WIDTH, config.CAM_HEIGHT, config.IMG_SIZE, config.IMG_SIZE, dw, dh)
 
         top = int(top)
         left = int(left)
