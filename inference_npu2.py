@@ -4,7 +4,7 @@ import platform
 from rknnlite.api import RKNNLite
 from imutils.video import FPS
 import time
-from lib.postprocess import yolov5_post_process, letterbox_reverse_box
+from lib.postprocess1 import yolov5_post_process, letterbox_reverse_box
 import lib.config as config
 import argparse
 
@@ -196,9 +196,6 @@ if __name__ == '__main__':
 
         # Inference
         outputs = rknn_lite.inference(inputs=[frame])
-
-        import pdb; pdb.set_trace()
-
 
         # post process
         input0_data = outputs[0]
