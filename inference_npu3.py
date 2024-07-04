@@ -46,6 +46,9 @@ def get_host():
         host = os_machine
     return host
 
+OBJ_THRESH = 0.25
+NMS_THRESH = 0.45
+
 def xywh2xyxy(x):
     # Convert [x, y, w, h] to [x1, y1, x2, y2]
     y = np.copy(x)
