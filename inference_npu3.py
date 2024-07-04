@@ -199,7 +199,7 @@ def yolov5_post_process(input_data):
 
     return boxes, classes, scores
 
-def draw(image, boxes, scores, classes, dw, dh):
+def draw(image, boxes, scores, classes):
     """Draw the boxes on the image.
 
     # Argument:
@@ -209,12 +209,10 @@ def draw(image, boxes, scores, classes, dw, dh):
         scores: ndarray, scores of objects.
         all_classes: all classes name.
     """
+    print("{:^12} {:^12}  {}".format('class', 'score', 'xmin, ymin, xmax, ymax'))
+    print('-' * 50)
     for box, score, cl in zip(boxes, scores, classes):
         top, left, right, bottom = box
-
-        ##Transform Box to original image
-        top, left, right, bottom = letterbox_reverse_box(top, left, right, bottom, config.CAM_WIDTH, config.CAM_HEIGHT, config.IMG_SIZE, config.IMG_SIZE, dw, dh)
-
         top = int(top)
         left = int(left)
         right = int(right)
@@ -225,6 +223,8 @@ def draw(image, boxes, scores, classes, dw, dh):
                     (top, left - 6),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.6, (0, 0, 255), 2)
+
+        print("{:^12} {:^12.3f} [{:>4}, {:>4}, {:>4}, {:>4}]".format(CLASSES[cl], score, top, left, right, bottom))
 
 def letterbox(im, new_shape=(640, 480), color=(0, 0, 0)):
 
