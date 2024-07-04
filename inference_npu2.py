@@ -212,11 +212,11 @@ if __name__ == '__main__':
         input_data.append(np.transpose(input1_data, (2, 3, 0, 1)))
         input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
 
-        cv2.imshow("yolov5 post process result", ori_frame)
+        # Disable Enable YOLO Post process
+        boxes, classes, scores = yolov5_post_process(input_data)
+        img_1 = ori_frame
 
-        # # Disable Enable YOLO Post process
-        # boxes, classes, scores = yolov5_post_process(input_data)
-        # img_1 = ori_frame
+        cv2.imshow("yolov5 post process result", ori_frame)
 
         # if boxes is not None:
         #     draw(img_1, boxes, scores, classes, dw, dh)
