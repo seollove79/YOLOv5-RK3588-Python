@@ -212,19 +212,24 @@ def draw(image, boxes, scores, classes):
     print("{:^12} {:^12}  {}".format('class', 'score', 'xmin, ymin, xmax, ymax'))
     print('-' * 50)
     for box, score, cl in zip(boxes, scores, classes):
-        top, left, right, bottom = box
-        top = int(top)
+        left, top, right, bottom = box
         left = int(left)
+        top = int(top)
         right = int(right)
         bottom = int(bottom)
 
-        cv2.rectangle(image, (top, left), (right, bottom), (255, 0, 0), 2)
-        cv2.putText(image, '{0} {1:.2f}'.format(CLASSES[cl], score),
-                    (top, left - 6),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.6, (0, 0, 255), 2)
+        # Draw rectangle
+        cv2.rectangle(image, (left, top), (right, bottom), (255, 0, 0), 2)
+        
+        # Draw label and score
+        label = f'{CLASSES[cl]}: {score:.2f}'
+        label_size, base_line = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
+        top = max(top, label_size[1])
+        cv2.rectangle(image, (left, top - label_size[1]), (left + label_size[0], top + base_line), (255, 255, 255), cv2.FILLED)
+        cv2.putText(image, label, (left, top), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
 
-        print("{:^12} {:^12.3f} [{:>4}, {:>4}, {:>4}, {:>4}]".format(CLASSES[cl], score, top, left, right, bottom))
+        print("{:^12} {:^12.3f} [{:>4}, {:>4}, {:>4}, {:>4}]".format(CLASSES[cl], score, left, top, right, bottom))
+
 
 def letterbox(im, new_shape=(640, 480), color=(0, 0, 0)):
 
