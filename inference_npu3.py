@@ -226,7 +226,7 @@ def draw(image, boxes, scores, classes):
 
         print("{:^12} {:^12.3f} [{:>4}, {:>4}, {:>4}, {:>4}]".format(CLASSES[cl], score, top, left, right, bottom))
 
-def letterbox(im, new_shape=(640, 480), color=(0, 0, 0)):
+def letterbox(im, new_shape=(640, 640), color=(0, 0, 0)):
 
 
     # Resize and pad image while meeting stride-multiple constraints
