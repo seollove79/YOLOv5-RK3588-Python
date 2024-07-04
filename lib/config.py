@@ -16,9 +16,9 @@ CLASSES = ("person", "bicycle", "car", "motorbike ", "aeroplane ", "bus ", "trai
 DEVICE_COMPATIBLE_NODE = '/proc/device-tree/compatible'
 
 RK356X_RKNN_MODEL = 'models/yolov5s.rknn'
-RK3588_RKNN_MODEL = 'models/yolov5s-640-640.rknn'
-#RK3588_RKNN_MODEL = 'models/yolov5s.rknn'
+#RK3588_RKNN_MODEL = 'models/yolov5s-640-640.rknn'
 #RK3588_RKNN_MODEL = 'models/yolov5s_relu.rknn'
+RK3588_RKNN_MODEL = 'yolov5s_relu_tk2_RK3588_i8'
 
 #Webcam dev /device/video0, /device/video1 etc.
 CAM_DEV = 0
