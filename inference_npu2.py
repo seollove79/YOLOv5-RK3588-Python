@@ -17,7 +17,8 @@ ap.add_argument("-f", "--filename", required=False, default="skyfall.mp4",
     help="file video (.mp4)")
 args = vars(ap.parse_args())
 
-IMG_SIZE = config.IMG_SIZE
+IMG_SIZE_WIDTH = config.IMG_SIZE_WIDTH
+IMG_SIZE_HEIGHT = config.IMG_SIZE_HEIGHT
 
 CLASSES = config.CLASSES
 
@@ -61,7 +62,7 @@ def draw(image, boxes, scores, classes, dw, dh):
         top, left, right, bottom = box
 
         ##Transform Box to original image
-        top, left, right, bottom = letterbox_reverse_box(top, left, right, bottom, config.CAM_WIDTH, config.CAM_HEIGHT, config.IMG_SIZE, config.IMG_SIZE, dw, dh)
+        top, left, right, bottom = letterbox_reverse_box(top, left, right, bottom, config.CAM_WIDTH, config.CAM_HEIGHT, config.IMG_SIZE_WIDTH, config.IMG_SIZE_HEIGHT, dw, dh)
 
         top = int(top)
         left = int(left)
@@ -189,7 +190,7 @@ if __name__ == '__main__':
         ori_frame = frame
 
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
+        frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE_WIDTH, IMG_SIZE_HEIGHT))
 
         # Convert to 4D array (N, C, H, W)
         frame = np.expand_dims(frame, axis=0)
