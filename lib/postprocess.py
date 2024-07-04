@@ -3,7 +3,7 @@ import lib.config as config
 
 OBJ_THRESH = config.OBJ_THRESH
 NMS_THRESH = config.NMS_THRESH
-IMG_SIZE = config.IMG_SIZE
+IMG_SIZE = config.IMG_SIZE_WIDTH
 
 def letterbox_reverse_box(x1, y1, x2, y2, width, height, new_width, new_height, dw, dh):
 
