@@ -191,13 +191,13 @@ if __name__ == '__main__':
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
 
+        # Convert to 4D array (N, C, H, W)
+        frame = np.expand_dims(frame, axis=0)
+
+        # Inference
+        outputs = rknn_lite.inference(inputs=[frame])
+
         cv2.imshow("yolov5 post process result", ori_frame)
-
-        # # Convert to 4D array (N, C, H, W)
-        # frame = np.expand_dims(frame, axis=0)
-
-        # # Inference
-        # outputs = rknn_lite.inference(inputs=[frame])
 
         # # post process
         # input0_data = outputs[0]
