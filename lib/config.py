@@ -2,7 +2,7 @@
 #OBJ_THRESH = 0.25
 OBJ_THRESH = 0.5
 NMS_THRESH = 0.45
-IMG_SIZE = 1920
+IMG_SIZE = 640
 # YOLOv5 Classes
 CLASSES = ("person", "bicycle", "car", "motorbike ", "aeroplane ", "bus ", "train", "truck ", "boat", "traffic light",
            "fire hydrant", "stop sign ", "parking meter", "bench", "bird", "cat", "dog ", "horse ", "sheep", "cow", "elephant",
@@ -26,12 +26,12 @@ CAM_DEV = 0
 CAM_DEV2 = 2
 
 #Capture Resolution
-CAM_WIDTH = 1920
-CAM_HEIGHT = 1080
+CAM_WIDTH = 640
+CAM_HEIGHT = 480
 
 #Position Display
 D1_WIDTH = 0
-D1_HEIGHT = 200
+D1_HEIGHT = 0
 
 D2_WIDTH = 640
 D2_HEIGHT = 200
