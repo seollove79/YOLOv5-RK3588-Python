@@ -26,8 +26,8 @@ CAM_DEV = 0
 CAM_DEV2 = 2
 
 #Capture Resolution
-CAM_WIDTH = 640
-CAM_HEIGHT = 480
+CAM_WIDTH = 1920
+CAM_HEIGHT = 1080
 
 #Position Display
 D1_WIDTH = 0
