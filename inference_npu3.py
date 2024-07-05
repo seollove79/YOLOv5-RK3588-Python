@@ -213,7 +213,7 @@ def draw(image, boxes, scores, classes):
     print('-' * 50)
     for box, score, cl in zip(boxes, scores, classes):
         top, left, right, bottom = box
-        top = int(top) + 100
+        top = int(top)
         left = int(left)
         right = int(right)
         bottom = int(bottom)
