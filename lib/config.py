@@ -2,7 +2,7 @@
 #OBJ_THRESH = 0.25
 OBJ_THRESH = 0.5
 NMS_THRESH = 0.45
-IMG_SIZE = 640
+IMG_SIZE = 1920
 # YOLOv5 Classes
 CLASSES = ("person", "bicycle", "car", "motorbike ", "aeroplane ", "bus ", "train", "truck ", "boat", "traffic light",
            "fire hydrant", "stop sign ", "parking meter", "bench", "bird", "cat", "dog ", "horse ", "sheep", "cow", "elephant",
