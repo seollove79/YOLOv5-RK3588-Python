@@ -121,6 +121,7 @@ def open_cam_usb(dev, width, height):
 
     elif args["inputtype"] == 'cam2':
         vs = cv2.VideoCapture(dev)
+        vs.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         vs.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         vs.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
