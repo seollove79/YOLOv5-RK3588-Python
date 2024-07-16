@@ -22,7 +22,8 @@ RK356X_RKNN_MODEL = 'models/yolov5s.rknn'
 RK3588_RKNN_MODEL = 'models/yolov5n.rknn'
 
 #Webcam dev /device/video0, /device/video1 etc.
-CAM_DEV = 0
+#CAM_DEV = 0
+CAM_DEV = "https://www.youtube.com/watch?v=d56-xmEz3ls"
 CAM_DEV2 = 2
 
 #Capture Resolution
