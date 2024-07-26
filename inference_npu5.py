@@ -259,6 +259,8 @@ def open_cam_usb(dev, width, height):
         vs.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         vs.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
+    
+
 
     return vs
 
@@ -297,6 +299,7 @@ if __name__ == '__main__':
 
     # Create Stream from Webcam
     vs = open_cam_usb(config.CAM_DEV, config.CAM_WIDTH, config.CAM_HEIGHT)
+    
 
     time.sleep(2.0)
     fps = FPS().start()
@@ -310,7 +313,14 @@ if __name__ == '__main__':
 
     # loop over the frames from the video stream
     while True:
+        print("Processing frame...")
         ret, frame = vs.read()
+
+        if not ret or frame is None:
+            print("Error: Cannot read frame from camera.")
+            exit()
+        else:
+            print("Successfully read test frame.")
 
         if not ret:
             break
