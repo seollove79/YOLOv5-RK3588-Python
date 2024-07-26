@@ -340,6 +340,7 @@ if __name__ == '__main__':
     # loop over the frames from the video stream
     while True:
         ret, frame = vs.read()
+        cv2.imshow("frame", frame)
 
         if not ret:
             print("Failed to grab frame")
