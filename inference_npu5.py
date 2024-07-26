@@ -327,6 +327,13 @@ if __name__ == '__main__':
 
     # loop over the frames from the video stream
     while True:
+        # 첫 번째 프레임에서만 출력 형태 확인
+        if fps._numFrames == 0:
+            outputs = rknn_lite.inference(inputs=[frame])
+            print("Number of outputs:", len(outputs))
+            for i, output in enumerate(outputs):
+                print(f"Output {i} shape:", output.shape)
+
         ret, frame = vs.read()
         
         if not ret:
