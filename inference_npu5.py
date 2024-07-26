@@ -348,23 +348,15 @@ if __name__ == '__main__':
 
         # Inference
         outputs = rknn_lite.inference(inputs=[frame])
-        print("Number of outputs:", len(outputs))
-        for i, output in enumerate(outputs):
-            print(f"Output {i} shape:", output.shape)
 
         # post process
         input0_data = outputs[0]
-        input1_data = outputs[1]
-        input2_data = outputs[2]
+        input_data = outputs[0]  # 단일 출력 사용
 
-        input0_data = input0_data.reshape([3, -1]+list(input0_data.shape[-2:]))
-        input1_data = input1_data.reshape([3, -1]+list(input1_data.shape[-2:]))
-        input2_data = input2_data.reshape([3, -1]+list(input2_data.shape[-2:]))
+        # 출력 형태에 따라 적절히 reshape
+        input_data = input_data.reshape([3, -1] + list(input_data.shape[-2:]))
 
-        input_data = list()
-        input_data.append(np.transpose(input0_data, (2, 3, 0, 1)))
-        input_data.append(np.transpose(input1_data, (2, 3, 0, 1)))
-        input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
+        input_data = [np.transpose(input_data, (2, 3, 0, 1))]
 
         # Disable Enable YOLO Post process
         boxes, classes, scores = yolov5_post_process(input_data)
