@@ -350,6 +350,14 @@ if __name__ == '__main__':
                 # show output
                 cv2.imshow("yolov5 post process result", img_1)
 
+                print(f"Detected {len(boxes)} objects")  # 탐지된 객체 수 출력
+
+            else:
+                cv2.imshow("yolov5 post process result", ori_frame)  # 원본 프레임 표시
+                print("No objects detected")
+
+            cv2.imwrite("latest_frame.jpg", img_1)  # 매 프레임마다 이미지 저장
+
                 
             key = cv2.waitKey(1) & 0xFF
             
