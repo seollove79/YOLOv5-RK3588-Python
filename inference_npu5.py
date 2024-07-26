@@ -311,6 +311,17 @@ if __name__ == '__main__':
     prev_frame_time = 0
     new_frame_time = 0
 
+
+
+    test_image = np.random.randint(0, 255, (IMG_SIZE, IMG_SIZE, 3), dtype=np.uint8)
+    test_image = np.expand_dims(test_image, axis=0)
+    try:
+        test_output = rknn_lite.inference(inputs=[test_image])
+        print("Test inference successful.")
+    except Exception as e:
+        print(f"Error during test inference: {e}")
+        exit()
+
     # loop over the frames from the video stream
     while True:
         print("Processing frame...")
