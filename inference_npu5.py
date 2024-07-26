@@ -324,69 +324,73 @@ if __name__ == '__main__':
 
     # loop over the frames from the video stream
     while True:
-        print("Processing frame...")
-        ret, frame = vs.read()
+        try:
+            print("Processing frame...")
+            ret, frame = vs.read()
 
-        if not ret or frame is None:
-            print("Error: Cannot read frame from camera.")
-            exit()
+            if not ret or frame is None:
+                print("Error: Cannot read frame from camera.")
+                exit()
 
-        if not ret:
-            break
+            if not ret:
+                break
 
-        new_frame_time = time.time()
-        show_fps = 1/(new_frame_time - prev_frame_time)
-        prev_frame_time = new_frame_time
-        show_fps = int(show_fps)
-        show_fps = str("{} FPS".format(show_fps))
+            new_frame_time = time.time()
+            show_fps = 1/(new_frame_time - prev_frame_time)
+            prev_frame_time = new_frame_time
+            show_fps = int(show_fps)
+            show_fps = str("{} FPS".format(show_fps))
 
-        ori_frame = frame
+            ori_frame = frame
 
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame, ratio, (dw, dh) = letterbox(frame, new_shape=(IMG_SIZE, IMG_SIZE))
 
-        # Convert to 4D array (N, C, H, W)
-        frame = np.expand_dims(frame, axis=0)
+            # Convert to 4D array (N, C, H, W)
+            frame = np.expand_dims(frame, axis=0)
 
-        # Inference
-        outputs = rknn_lite.inference(inputs=[frame])
+            # Inference
+            outputs = rknn_lite.inference(inputs=[frame])
 
-        # # 첫 번째 프레임에서만 출력 형태 확인
-        # if fps._numFrames == 0:
-        #     outputs = rknn_lite.inference(inputs=[frame])
-        #     print("Number of outputs:", len(outputs))
-        #     for i, output in enumerate(outputs):
-        #         print(f"Output {i} shape:", output.shape)
+            # # 첫 번째 프레임에서만 출력 형태 확인
+            # if fps._numFrames == 0:
+            #     outputs = rknn_lite.inference(inputs=[frame])
+            #     print("Number of outputs:", len(outputs))
+            #     for i, output in enumerate(outputs):
+            #         print(f"Output {i} shape:", output.shape)
 
-        # 단일 출력 처리
-        input_data = outputs[0]  # 단일 출력 사용
+            # 단일 출력 처리
+            input_data = outputs[0]  # 단일 출력 사용
 
-        # reshape 불필요, 직접 사용
-        input_data = [input_data]  # list 형태로 유지
+            # reshape 불필요, 직접 사용
+            input_data = [input_data]  # list 형태로 유지
 
-        # post process
-        boxes, classes, scores = yolov5_post_process(input_data)
-        img_1 = ori_frame
+            # post process
+            boxes, classes, scores = yolov5_post_process(input_data)
+            img_1 = ori_frame
 
-        if boxes is not None:
-            draw(img_1, boxes, scores, classes)
-           
-            # show FPS in Frame
-            cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
+            if boxes is not None:
+                draw(img_1, boxes, scores, classes)
             
-            # show output
-            cv2.imshow("yolov5 post process result", img_1)
+                # show FPS in Frame
+                cv2.putText(img_1, show_fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (100, 255, 0), 1, cv2.LINE_AA)
+                
+                # show output
+                cv2.imshow("yolov5 post process result", img_1)
 
+                
+            key = cv2.waitKey(1) & 0xFF
             
-        key = cv2.waitKey(1) & 0xFF
-        
-        # if the `q` key was pressed, break from the loop
-        if key == ord("q"):
-            break
-        
+            # if the `q` key was pressed, break from the loop
+            if key == ord("q"):
+                break
+            
 
-        # update the FPS counter
-        fps.update()
+            # update the FPS counter
+            fps.update()
+        except Exception as e:
+            print(f"Error in main loop: {e}")
+            break
 
     rknn_lite.release()
 
