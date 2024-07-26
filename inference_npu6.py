@@ -160,19 +160,21 @@ def nms_boxes(boxes, scores):
 
 
 def yolov5_post_process(output):
-    masks = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+    num_classes = len(CLASSES)
     anchors = [[10, 13], [16, 30], [33, 23], [30, 61], [62, 45],
                [59, 119], [116, 90], [156, 198], [373, 326]]
+    num_anchors = len(anchors)
 
-    grid_h, grid_w, num_anchors = output.shape[:3]
-    num_classes = len(CLASSES)
-    output = output.reshape((grid_h, grid_w, num_anchors // 3, 3, 5 + num_classes))
-    output = np.transpose(output, (2, 0, 1, 3, 4))  # Reshape to (3, grid_h, grid_w, 3, 5 + num_classes)
+    grid_h, grid_w, _ = output.shape
+    num_anchors = 3
+
+    output = output.reshape((grid_h, grid_w, num_anchors, 5 + num_classes))
 
     boxes, classes, scores = [], [], []
-    for i in range(3):
-        input = output[i]
-        mask = masks[i]
+
+    for i in range(num_anchors):
+        input = output[:, :, i, :]
+        mask = [i]
         b, c, s = process(input, mask, anchors)
         b, c, s = filter_boxes(b, c, s)
         boxes.append(b)
@@ -365,6 +367,7 @@ if __name__ == '__main__':
 
         # Post-process the single output tensor
         output = outputs[0]
+        print("Output shape:", output.shape)
 
         # Assuming the output tensor shape is (grid_h, grid_w, 3 * (5 + len(CLASSES)))
         boxes, classes, scores = yolov5_post_process(output)
