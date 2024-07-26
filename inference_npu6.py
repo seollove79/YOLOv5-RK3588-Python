@@ -212,7 +212,6 @@ def yolov5_post_process(output):
     return boxes, classes, scores
 
 
-
 def draw(image, boxes, scores, classes):
     """Draw the boxes on the image.
 
@@ -343,6 +342,7 @@ if __name__ == '__main__':
         ret, frame = vs.read()
 
         if not ret:
+            print("Failed to grab frame")
             break
 
         new_frame_time = time.time()
