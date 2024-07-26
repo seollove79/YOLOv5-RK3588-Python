@@ -163,11 +163,9 @@ def yolov5_post_process(output):
     num_classes = len(CLASSES)
     anchors = [[10, 13], [16, 30], [33, 23], [30, 61], [62, 45],
                [59, 119], [116, 90], [156, 198], [373, 326]]
-    num_anchors = len(anchors)
-
-    grid_h, grid_w, _ = output.shape
     num_anchors = 3
 
+    grid_h, grid_w, _ = output.shape
     output = output.reshape((grid_h, grid_w, num_anchors, 5 + num_classes))
 
     boxes, classes, scores = [], [], []
@@ -369,8 +367,9 @@ if __name__ == '__main__':
         output = outputs[0]
         print("Output shape:", output.shape)
 
-        # Assuming the output tensor shape is (grid_h, grid_w, 3 * (5 + len(CLASSES)))
-        boxes, classes, scores = yolov5_post_process(output)
+        # Assuming the output tensor shape is (1, 25200, 6)
+        output = output.reshape((1, 25200, 6))
+        boxes, classes, scores = yolov5_post_process(output[0])  # Extract the 0th element to match (25200, 6) shape
         img_1 = ori_frame
 
         if boxes is not None:
