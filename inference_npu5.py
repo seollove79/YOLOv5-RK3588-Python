@@ -88,18 +88,6 @@ def process(input, mask, anchors):
 
 
 def filter_boxes(boxes, box_confidences, box_class_probs):
-    """Filter boxes with box threshold. It's a bit different with origin yolov5 post process!
-
-    # Arguments
-        boxes: ndarray, boxes of objects.
-        box_confidences: ndarray, confidences of objects.
-        box_class_probs: ndarray, class_probs of objects.
-
-    # Returns
-        boxes: ndarray, filtered boxes.
-        classes: ndarray, classes for boxes.
-        scores: ndarray, scores for boxes.
-    """
     boxes = boxes.reshape(-1, 4)
     box_confidences = box_confidences.reshape(-1)
     box_class_probs = box_class_probs.reshape(-1, box_class_probs.shape[-1])
@@ -121,15 +109,6 @@ def filter_boxes(boxes, box_confidences, box_class_probs):
 
 
 def nms_boxes(boxes, scores):
-    """Suppress non-maximal boxes.
-
-    # Arguments
-        boxes: ndarray, boxes of objects.
-        scores: ndarray, scores of objects.
-
-    # Returns
-        keep: ndarray, index of effective boxes.
-    """
     x = boxes[:, 0]
     y = boxes[:, 1]
     w = boxes[:, 2] - boxes[:, 0]
@@ -351,13 +330,6 @@ if __name__ == '__main__':
 
             # Inference
             outputs = rknn_lite.inference(inputs=[frame])
-
-            # # 첫 번째 프레임에서만 출력 형태 확인
-            # if fps._numFrames == 0:
-            #     outputs = rknn_lite.inference(inputs=[frame])
-            #     print("Number of outputs:", len(outputs))
-            #     for i, output in enumerate(outputs):
-            #         print(f"Output {i} shape:", output.shape)
 
             # 단일 출력 처리
             input_data = outputs[0]  # 단일 출력 사용
