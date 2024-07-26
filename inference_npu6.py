@@ -159,13 +159,16 @@ def nms_boxes(boxes, scores):
     return keep
 
 
-def yolov5_post_process(input_data):
+def yolov5_post_process(output):
     masks = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
     anchors = [[10, 13], [16, 30], [33, 23], [30, 61], [62, 45],
                [59, 119], [116, 90], [156, 198], [373, 326]]
 
     boxes, classes, scores = [], [], []
-    for input, mask in zip(input_data, masks):
+
+    for i in range(3):
+        input = output[:, :, :, i * (5 + len(CLASSES)):(i + 1) * (5 + len(CLASSES))]
+        mask = masks[i]
         b, c, s = process(input, mask, anchors)
         b, c, s = filter_boxes(b, c, s)
         boxes.append(b)
@@ -351,27 +354,16 @@ if __name__ == '__main__':
 
         # Debug print to check outputs
         print("Inference outputs:", outputs)
-        
-        if len(outputs) != 3:
-            print("Error: Expected 3 output tensors, but got", len(outputs))
+
+        if len(outputs) != 1:
+            print("Error: Expected 1 output tensor, but got", len(outputs))
             break
 
-        # post process
-        input0_data = outputs[0]
-        input1_data = outputs[1]
-        input2_data = outputs[2]
+        # Post-process the single output tensor
+        output = outputs[0]
 
-        input0_data = input0_data.reshape([3, -1]+list(input0_data.shape[-2:]))
-        input1_data = input1_data.reshape([3, -1]+list(input1_data.shape[-2:]))
-        input2_data = input2_data.reshape([3, -1]+list(input2_data.shape[-2:]))
-
-        input_data = list()
-        input_data.append(np.transpose(input0_data, (2, 3, 0, 1)))
-        input_data.append(np.transpose(input1_data, (2, 3, 0, 1)))
-        input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
-
-        # Disable Enable YOLO Post process
-        boxes, classes, scores = yolov5_post_process(input_data)
+        # Assuming the output tensor shape is (1, IMG_SIZE // 8, IMG_SIZE // 8, 3 * (5 + len(CLASSES)))
+        boxes, classes, scores = yolov5_post_process(output)
         img_1 = ori_frame
 
         if boxes is not None:
