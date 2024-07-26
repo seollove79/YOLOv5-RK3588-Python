@@ -165,15 +165,25 @@ def yolov5_post_process(input_data):
                [59, 119], [116, 90], [156, 198], [373, 326]]
 
     boxes, classes, scores = [], [], []
-    for input, mask in zip(input_data, masks):
-        b, c, s = process(input, mask, anchors)
-        b, c, s = filter_boxes(b, c, s)
-        boxes.append(b)
-        classes.append(c)
-        scores.append(s)
+    for i, pred in enumerate(input_data):
+        pred = pred.squeeze()
+        box_xy = pred[..., 0:2]
+        box_wh = pred[..., 2:4]
+        score = pred[..., 4:5]
+        cls = pred[..., 5:]
+        
+        box_xy = box_xy * 2.0 - 0.5
+        box_wh = (box_wh * 2) ** 2
+        box_xy -= box_wh / 2
+        
+        box = np.concatenate((box_xy, box_wh), axis=-1)
+        
+        box, cls, score = filter_boxes(box, cls, score)
+        boxes.append(box)
+        classes.append(cls)
+        scores.append(score)
 
     boxes = np.concatenate(boxes)
-    boxes = xywh2xyxy(boxes)
     classes = np.concatenate(classes)
     scores = np.concatenate(scores)
 
@@ -198,33 +208,6 @@ def yolov5_post_process(input_data):
     scores = np.concatenate(nscores)
 
     return boxes, classes, scores
-
-def draw(image, boxes, scores, classes):
-    """Draw the boxes on the image.
-
-    # Argument:
-        image: original image.
-        boxes: ndarray, boxes of objects.
-        classes: ndarray, classes of objects.
-        scores: ndarray, scores of objects.
-        all_classes: all classes name.
-    """
-    print("{:^12} {:^12}  {}".format('class', 'score', 'xmin, ymin, xmax, ymax'))
-    print('-' * 50)
-    for box, score, cl in zip(boxes, scores, classes):
-        top, left, right, bottom = box
-        top = int(top)
-        left = int(left)
-        right = int(right)
-        bottom = int(bottom)
-
-        cv2.rectangle(image, (top, left), (right, bottom), (255, 0, 0), 2)
-        cv2.putText(image, '{0} {1:.2f}'.format(CLASSES[cl], score),
-                    (top, left - 6),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.6, (0, 0, 255), 2)
-
-        print("{:^12} {:^12.3f} [{:>4}, {:>4}, {:>4}, {:>4}]".format(CLASSES[cl], score, top, left, right, bottom))
 
 def letterbox(im, new_shape=(640, 640), color=(0, 0, 0)):
 
@@ -349,23 +332,20 @@ if __name__ == '__main__':
         # Inference
         outputs = rknn_lite.inference(inputs=[frame])
 
-        # 첫 번째 프레임에서만 출력 형태 확인
-        if fps._numFrames == 0:
-            outputs = rknn_lite.inference(inputs=[frame])
-            print("Number of outputs:", len(outputs))
-            for i, output in enumerate(outputs):
-                print(f"Output {i} shape:", output.shape)
+        # # 첫 번째 프레임에서만 출력 형태 확인
+        # if fps._numFrames == 0:
+        #     outputs = rknn_lite.inference(inputs=[frame])
+        #     print("Number of outputs:", len(outputs))
+        #     for i, output in enumerate(outputs):
+        #         print(f"Output {i} shape:", output.shape)
 
-        # post process
-        input0_data = outputs[0]
+        # 단일 출력 처리
         input_data = outputs[0]  # 단일 출력 사용
 
-        # 출력 형태에 따라 적절히 reshape
-        input_data = input_data.reshape([3, -1] + list(input_data.shape[-2:]))
+        # reshape 불필요, 직접 사용
+        input_data = [input_data]  # list 형태로 유지
 
-        input_data = [np.transpose(input_data, (2, 3, 0, 1))]
-
-        # Disable Enable YOLO Post process
+        # post process
         boxes, classes, scores = yolov5_post_process(input_data)
         img_1 = ori_frame
 
