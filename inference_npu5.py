@@ -319,8 +319,6 @@ if __name__ == '__main__':
         if not ret or frame is None:
             print("Error: Cannot read frame from camera.")
             exit()
-        else:
-            print("Successfully read test frame.")
 
         if not ret:
             break
