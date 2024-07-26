@@ -165,25 +165,30 @@ def yolov5_post_process(output):
                [59, 119], [116, 90], [156, 198], [373, 326]]
     num_anchors = 3
 
-    grid_h, grid_w, _ = output.shape
-    output = output.reshape((grid_h, grid_w, num_anchors, 5 + num_classes))
+    # output shape is (25200, 6)
+    output = output.reshape((-1, 6))
 
     boxes, classes, scores = [], [], []
 
-    for i in range(num_anchors):
-        input = output[:, :, i, :]
-        mask = [i]
-        b, c, s = process(input, mask, anchors)
-        b, c, s = filter_boxes(b, c, s)
-        boxes.append(b)
-        classes.append(c)
-        scores.append(s)
+    box_xy = output[:, :2]
+    box_wh = output[:, 2:4]
+    box_confidence = output[:, 4:5]
+    box_class_probs = output[:, 5:]
 
-    boxes = np.concatenate(boxes)
-    boxes = xywh2xyxy(boxes)
-    classes = np.concatenate(classes)
-    scores = np.concatenate(scores)
+    # Process the boxes
+    box_xy = (box_xy - 0.5) * 2
+    box_wh = box_wh ** 2
 
+    # Convert xywh to xyxy format
+    boxes = xywh2xyxy(np.concatenate([box_xy, box_wh], axis=-1))
+
+    # Filter boxes
+    box_confidences = box_confidence.flatten()
+    box_class_probs = np.concatenate([box_class_probs] * num_classes, axis=-1).reshape(-1, num_classes)
+    
+    boxes, classes, scores = filter_boxes(boxes, box_confidences, box_class_probs)
+
+    # Perform non-max suppression
     nboxes, nclasses, nscores = [], [], []
     for c in set(classes):
         inds = np.where(classes == c)
@@ -205,6 +210,7 @@ def yolov5_post_process(output):
     scores = np.concatenate(nscores)
 
     return boxes, classes, scores
+
 
 
 def draw(image, boxes, scores, classes):
