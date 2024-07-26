@@ -164,10 +164,14 @@ def yolov5_post_process(output):
     anchors = [[10, 13], [16, 30], [33, 23], [30, 61], [62, 45],
                [59, 119], [116, 90], [156, 198], [373, 326]]
 
-    boxes, classes, scores = [], [], []
+    grid_h, grid_w, num_anchors = output.shape[:3]
+    num_classes = len(CLASSES)
+    output = output.reshape((grid_h, grid_w, num_anchors // 3, 3, 5 + num_classes))
+    output = np.transpose(output, (2, 0, 1, 3, 4))  # Reshape to (3, grid_h, grid_w, 3, 5 + num_classes)
 
+    boxes, classes, scores = [], [], []
     for i in range(3):
-        input = output[:, :, :, i * (5 + len(CLASSES)):(i + 1) * (5 + len(CLASSES))]
+        input = output[i]
         mask = masks[i]
         b, c, s = process(input, mask, anchors)
         b, c, s = filter_boxes(b, c, s)
@@ -362,7 +366,7 @@ if __name__ == '__main__':
         # Post-process the single output tensor
         output = outputs[0]
 
-        # Assuming the output tensor shape is (1, IMG_SIZE // 8, IMG_SIZE // 8, 3 * (5 + len(CLASSES)))
+        # Assuming the output tensor shape is (grid_h, grid_w, 3 * (5 + len(CLASSES)))
         boxes, classes, scores = yolov5_post_process(output)
         img_1 = ori_frame
 
